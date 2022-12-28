@@ -16,16 +16,7 @@ public class VoxelDataHandler
     public VoxelDataHandler(float scale, InputData inputData)
     {
         this.data = new VoxelData();
-        data.ChangeData(1, 1, 1, 1);
-        data.ChangeData(2, 2, 2, 2);
-        data.ChangeData(3, 3, 3, 1);
-        data.ChangeData(4, 4, 4, 2);
-        data.ChangeData(5, 5, 5, 1);
-        data.ChangeData(6, 6, 6, 2);
-        data.ChangeData(7, 7, 7, 2);
-        data.ChangeData(8, 8, 8, 2);
-        data.ChangeData(9, 9, 9, 2);
-        data.ChangeData(10, 10, 10, 1);
+
         this.GlobalSceneScale = scale;
         this._inputData = inputData;
         this.selectedMat = 1;
