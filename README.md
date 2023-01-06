@@ -1,5 +1,6 @@
 # VoxelSculpt_2
  Voxel sculpter inside Unity and VR
+Video of current version: https://youtu.be/qT2LdweQl1w
 
 ## TODO:
 
