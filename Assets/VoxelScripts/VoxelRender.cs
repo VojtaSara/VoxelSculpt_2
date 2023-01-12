@@ -19,6 +19,12 @@ public class VoxelRender : MonoBehaviour
 
     float adjScale;
 
+
+    public void changePalette()
+    {
+        voxelDataHandler.selectedMat = (voxelDataHandler.selectedMat == 1) ? 2 : 1;
+    }
+
     void Awake()
     {
         mesh = GetComponent<MeshFilter>().mesh;
@@ -40,6 +46,7 @@ public class VoxelRender : MonoBehaviour
         GenerateVoxelMesh(voxelDataHandler.data);
         UpdateMesh();
     }
+
 
     private void GenerateVoxelMesh(VoxelData data)
     {

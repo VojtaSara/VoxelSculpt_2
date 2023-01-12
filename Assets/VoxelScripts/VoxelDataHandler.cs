@@ -11,7 +11,8 @@ public class VoxelDataHandler
     private InputData _inputData;
     private Vector3 controllerPosition;
     private Vector3 lastPos;
-    private int selectedMat;
+    public int selectedMat;
+
 
     public VoxelDataHandler(float scale, InputData inputData)
     {
@@ -34,9 +35,10 @@ public class VoxelDataHandler
         {
             if (_inputData._leftController.TryGetFeatureValue(CommonUsages.trigger, out float triggerPos))
             {
-                if (triggerPos > 0.5f && realCoordsToGridCoords(controllerPosition) != lastPos)
+                _inputData._leftController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion controllerRotation);
+                if (triggerPos > 0.5f && realCoordsToGridCoords(adjustTipPosition(controllerPosition, controllerRotation)) != lastPos)
                 {
-                    Vector3Int voxelPos = realCoordsToGridCoords(controllerPosition);
+                    Vector3Int voxelPos = realCoordsToGridCoords(adjustTipPosition(controllerPosition, controllerRotation));
                     lastPos = voxelPos;
                     if (data.GetCell(voxelPos.x, voxelPos.y, voxelPos.z) == 0)
                     {
@@ -48,7 +50,6 @@ public class VoxelDataHandler
                     }
                 }
             }
-            System.Random r = new System.Random();
 /*          Vector3 GridCoords = realCoordsToGridCoords(rightHandCoords());
 
             if (data.GetCell((int)GridCoords.x, (int)GridCoords.y, (int)GridCoords.z) == 0)
@@ -60,6 +61,12 @@ public class VoxelDataHandler
                 data.ChangeData((int)GridCoords.x, (int)GridCoords.y, (int)GridCoords.z, 0);
             }*/
         }
+    }
+
+    private Vector3 adjustTipPosition(Vector3 controllerPosition, Quaternion controllerRotation)
+    {
+        Vector3 tipPosition = controllerPosition + controllerRotation * new Vector3(0, -0.05f, 0.15f);
+        return tipPosition;
     }
 
     private Vector3 rightHandCoords()
