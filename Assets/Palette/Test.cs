@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(VoxelRender))]
-public class PaletteChanger : MonoBehaviour
+public class Test : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -17,8 +16,8 @@ public class PaletteChanger : MonoBehaviour
         
     }
 
-    public void changePalette()
+    public void PrintDebug()
     {
-        GetComponent<VoxelRender>().changePalette();
+        Debug.Log("Hello World");
     }
 }

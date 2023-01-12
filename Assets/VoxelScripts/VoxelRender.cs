@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
-[RequireComponent (typeof(MeshFilter), typeof(MeshRenderer), typeof(InputData))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(InputData))]
 public class VoxelRender : MonoBehaviour
 {
     Mesh mesh;
@@ -13,16 +13,29 @@ public class VoxelRender : MonoBehaviour
     List<Vector2> uvs;
     VoxelDataHandler voxelDataHandler;
 
+    
     private InputData _inputData;
 
     public float scale = 1f;
 
     float adjScale;
 
-
-    public void changePalette()
+    public void startRecievingInput()
     {
-        voxelDataHandler.selectedMat = (voxelDataHandler.selectedMat == 1) ? 2 : 1;
+        Debug.Log("Recieving Input");
+        voxelDataHandler.recievingInput = true;
+    }
+
+    public void stopRecievingInput()
+    {
+        Debug.Log("Not Recieving Input");
+        voxelDataHandler.recievingInput = false;
+
+    }
+
+    public void setMaterial(int color)
+    {
+        voxelDataHandler.selectedMat = color;
     }
 
     void Awake()
@@ -86,20 +99,17 @@ public class VoxelRender : MonoBehaviour
         System.Random r = new System.Random();
         int vCount = vertices.Count;
 
-        if (faceMat == 1)
-        {
-            uvs.Add(new Vector2(0, 0));
-            uvs.Add(new Vector2(0, 0.5f));
-            uvs.Add(new Vector2(0.5f, 0.5f));         
-            uvs.Add(new Vector2(0.5f, 0));
-        }
-        else
-        {
-            uvs.Add(new Vector2(0.5f, 0.5f));
-            uvs.Add(new Vector2(0.5f, 1));
-            uvs.Add(new Vector2(1, 1));
-            uvs.Add(new Vector2(1, 0.5f));
-        }
+        int colorRows = 8;
+        
+        int U = faceMat % colorRows;
+        int V = faceMat / colorRows;
+
+        float UVres = 1f / colorRows;
+
+        uvs.Add(new Vector2(U*UVres, V*UVres));
+        uvs.Add(new Vector2(U * UVres, (V + 1) * UVres));
+        uvs.Add(new Vector2((U + 1) * UVres, (V + 1) * UVres));
+        uvs.Add(new Vector2((U + 1) * UVres, V * UVres));
 
 
         triangles.Add(vCount - 4);

@@ -12,12 +12,14 @@ public class VoxelDataHandler
     private Vector3 controllerPosition;
     private Vector3 lastPos;
     public int selectedMat;
+    public bool recievingInput;
 
 
     public VoxelDataHandler(float scale, InputData inputData)
     {
         this.data = new VoxelData();
 
+        this.recievingInput = true;
         this.GlobalSceneScale = scale;
         this._inputData = inputData;
         this.selectedMat = 1;
@@ -25,18 +27,15 @@ public class VoxelDataHandler
 
     public void Update()
     {
-        if (_inputData._leftController.TryGetFeatureValue(CommonUsages.secondaryButton, out bool isPressed) && isPressed)
+        if (_inputData._rightController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 controllerPosition))
         {
-            selectedMat = (selectedMat == 1) ? 2 : 1;
-        }
-
-
-        if (_inputData._leftController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 controllerPosition))
-        {
-            if (_inputData._leftController.TryGetFeatureValue(CommonUsages.trigger, out float triggerPos))
+            if (_inputData._rightController.TryGetFeatureValue(CommonUsages.trigger, out float triggerPos))
             {
-                _inputData._leftController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion controllerRotation);
-                if (triggerPos > 0.5f && realCoordsToGridCoords(adjustTipPosition(controllerPosition, controllerRotation)) != lastPos)
+                // log triggerpos
+                _inputData._rightController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion controllerRotation);
+                if (recievingInput
+                    && triggerPos == 1 
+                    && realCoordsToGridCoords(adjustTipPosition(controllerPosition, controllerRotation)) != lastPos)
                 {
                     Vector3Int voxelPos = realCoordsToGridCoords(adjustTipPosition(controllerPosition, controllerRotation));
                     lastPos = voxelPos;
@@ -49,17 +48,11 @@ public class VoxelDataHandler
                         data.ChangeData(voxelPos.x, voxelPos.y, voxelPos.z, 0);
                     }
                 }
+                if (triggerPos == 0)
+                {
+                    recievingInput = true;
+                }
             }
-/*          Vector3 GridCoords = realCoordsToGridCoords(rightHandCoords());
-
-            if (data.GetCell((int)GridCoords.x, (int)GridCoords.y, (int)GridCoords.z) == 0)
-            {
-                data.ChangeData((int)GridCoords.x, (int)GridCoords.y, (int)GridCoords.z, 1);
-            }
-            else
-            {
-                data.ChangeData((int)GridCoords.x, (int)GridCoords.y, (int)GridCoords.z, 0);
-            }*/
         }
     }
 
