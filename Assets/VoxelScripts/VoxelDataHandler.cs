@@ -13,6 +13,7 @@ public class VoxelDataHandler
     private Vector3 lastPos;
     public int selectedMat;
     public bool recievingInput;
+    private bool erasing;
 
 
     public VoxelDataHandler(float scale, InputData inputData)
@@ -21,31 +22,39 @@ public class VoxelDataHandler
 
         this.recievingInput = true;
         this.GlobalSceneScale = scale;
+        this.erasing = false;
         this._inputData = inputData;
         this.selectedMat = 1;
     }
 
     public void Update()
     {
+
+        if (_inputData._leftController.TryGetFeatureValue(CommonUsages.secondaryButton, out bool isPressed) && isPressed)
+        {
+            this.erasing = !this.erasing;
+        }
+        
         if (_inputData._rightController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 controllerPosition))
         {
             if (_inputData._rightController.TryGetFeatureValue(CommonUsages.trigger, out float triggerPos))
             {
-                // log triggerpos
+                
                 _inputData._rightController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion controllerRotation);
+                
                 if (recievingInput
                     && triggerPos == 1 
                     && realCoordsToGridCoords(adjustTipPosition(controllerPosition, controllerRotation)) != lastPos)
                 {
                     Vector3Int voxelPos = realCoordsToGridCoords(adjustTipPosition(controllerPosition, controllerRotation));
                     lastPos = voxelPos;
+                    if (erasing)
+                    {
+                        data.ChangeData(voxelPos.x, voxelPos.y, voxelPos.z, 0);
+                    }
                     if (data.GetCell(voxelPos.x, voxelPos.y, voxelPos.z) == 0)
                     {
                         data.ChangeData(voxelPos.x, voxelPos.y, voxelPos.z, selectedMat);
-                    }
-                    else
-                    {
-                        data.ChangeData(voxelPos.x, voxelPos.y, voxelPos.z, 0);
                     }
                 }
                 if (triggerPos == 0)
