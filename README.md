@@ -4,7 +4,7 @@ Video of current version: https://youtu.be/Du4xWlr0fWg
 
 ## TODO:
 
-- add a material pallette to your off hand
+- ~~add a material pallette to your off hand~~
 - add a preview box showing where the brushstroke will appear (pen tip)
 - add a line brush
 - add a box brush
