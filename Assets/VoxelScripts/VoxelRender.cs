@@ -22,20 +22,40 @@ public class VoxelRender : MonoBehaviour
 
     public void startRecievingInput()
     {
-        Debug.Log("Recieving Input");
         voxelDataHandler.recievingInput = true;
     }
 
     public void stopRecievingInput()
     {
-        Debug.Log("Not Recieving Input");
         voxelDataHandler.recievingInput = false;
-
     }
 
     public void setMaterial(int color)
     {
         voxelDataHandler.selectedMat = color;
+    }
+
+    public void switchMode(string mode)
+    {
+        if (mode == "erase")
+        {
+            voxelDataHandler.erasing = true;
+        }
+        else if (mode == "draw")
+        {
+            voxelDataHandler.erasing = false;
+        }
+    }
+
+    public Vector3 realCoordsToGridCoords(Vector3 controllerPosition, Quaternion controllerRotation)
+    {
+        return voxelDataHandler.realCoordsToGridCoords(
+            voxelDataHandler.adjustTipPosition(controllerPosition, controllerRotation));
+    }
+
+    public float getGlobalScale()
+    {
+        return adjScale;
     }
 
     void Awake()
