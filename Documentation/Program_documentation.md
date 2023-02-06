@@ -56,3 +56,8 @@ Paleta je sestavená z Unity UI komponentů, zjednodušeně je více "naklikaná
 
 ### Reticle
 Reticle je jednoduchý GameObject vycházející z primitivního objektu 3D krychle, který se skrze skript ReticleController.cs drží ve správné pozici v relaci k pravému ovladači, když jsme v módu kreslení. V módu výběru z palety se reticle neukazuje, aby uživatele nemátl.
+
+## 4. Diskuze
+Reprezentace dat pomocí 3D array je velmi jednoduchá a má své výhody v konstatním přístupu při přidávání a mazání kostiček, ale při rerenderu meshe je výpočetně náročná. Ideální by byl nějaký octree, nebo jednodušeji mřížka rozdělená do "chunků" aby se vždy updatoval pouze malý kousek celkové meshe. Tím by šel zachovat konstantní přístup a zároveň by se odebrala kubická daň za zvětšení kreslícího prostoru. 
+
+Při dalším refactoringu by bylo dobré lépe sjednotit prvky vytvořené v UI Unity a prvky vytvořené pomocí skriptů. Například paleta by měla být vytvářena dynamicky z dodané textury možných štětců a neměla by být naklikána v Unity. 
